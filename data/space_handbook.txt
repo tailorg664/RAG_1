@@ -1,0 +1,8 @@
+--- MISSION PROTOCOL: EMERGENCY OXYGEN FAILURE ---
+In the event of an unexpected drop in cabin oxygen levels below 18%, astronauts must immediately deploy the Emergency Secondary Oxygen (ESO) physical valve located beneath Sector 4 seating. Do not attempt to reboot the main environmental computer until the manual override is locked in place.
+
+--- PLANET PROFILE: GLIESE 581g ---
+Gliese 581g is a rocky exoplanet orbiting within the habitable zone of its red dwarf star. The atmospheric composition is heavily saturated with nitrogen and carbon dioxide. Extreme caution: Surface gravity is 1.6x that of Earth. Specialized heavy-exosuits are strictly mandatory for surface exploration to prevent joint collapse.
+
+--- COLONY UPDATE: MARS BASE ALPHA ---
+As of 2026, the hydroponics bay at Mars Base Alpha has successfully yielded its first harvest of modified cosmic potatoes. These crops utilize a closed-loop water recycling system that processes up to 98% of greywater runoff.
