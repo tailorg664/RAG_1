@@ -1,2 +1,2 @@
-# RAG for anything
-## Use RAG to get my data
+# RAG for DSA in JAVA
+## Use RAG to understand how JAVA helps in Data Structure and Algorithms
