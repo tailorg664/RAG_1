@@ -28,7 +28,7 @@ vector_store = Chroma.from_documents(docs,embedding=embeddings,persist_directory
 
 retriever = vector_store.as_retriever(search_type="similarity",search_kwargs={"k":3})
 
-retrieved_docs = retriever.invoke("What is the lesson from john hamilton?")
+retrieved_docs = retriever.invoke("Who is sappho?")
 
 # LLM integration
 llm = ChatGoogleGenerativeAI(
@@ -68,11 +68,9 @@ rag_chain = create_retrieval_chain(
     combine_docs_chain=document_chain,
 )
 
-query = "What is the lesson from john hamilton?"
+query = "Who is sappho?"
 print(f"Sending query to Gemini : {query}")
 
-# Run this temporary test line to see what is actually going over the wire:
-print(prompt.format(context="TEST CONTEXT TEXT", input="What is the theory of lyric?"))
 
 # giving "input" as the key because we defined it in the prompt template
 
@@ -84,7 +82,3 @@ print("\n================== GEMINI ANSWER ==================")
 print(result["answer"])
 print("===================================================")
 
-print("\n[Debug] Source Chunks Retrieved:")
-for idx, doc in enumerate(result["context"]):
-    print(f"--- Chunk {idx + 1} (Page {doc.metadata.get('page', 'unknown')}) ---")
-    print(doc.page_content[:150] + "...")
