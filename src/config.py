@@ -25,17 +25,17 @@ SYSTEM_PROMPT = """
       2. Provide the reference code for the question asked,
 
       For example,
-      {
+      {{
             Input : What is the boilerplate of java?
             Response : The boilerplate of Java refers to the standard code structure and syntax that is commonly used in Java programming. It includes elements such as class definitions, method declarations, and import statements that are necessary for a Java program to function correctly. 
             Here is the reference code for the boilerplate of Java:
             package example;
-            public class Main {
-            public static void main(String[] args) {
+            public class Main {{
+            public static void main(String[] args) {{
                   System.out.println("Hello, World!");
-            }
-            }
-      }
+            }}
+            }}
+      }}
       Use the retrieved context below to answer the user's question.
       If the answer cannot be found in the provided context, respond with: "I don't know."
 
