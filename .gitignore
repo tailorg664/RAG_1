@@ -2,4 +2,4 @@
 .env
 chroma/
 dsa.pdf
-hso.pdf
+__pycache__/**/*
