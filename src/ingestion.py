@@ -35,18 +35,30 @@ def ingest_structured_pdf(file_path:str,pdf_offset:int = 0):
             persist_directory=config.CHROMA_DIR,
             embedding_function=embeddings
       )
-      print("\n[3/3] Uploading chunks to Chroma in safe batches...")
-      BATCH_SIZE = 15
-      DELAY_SECONDS = 40
-      total_chunks = len(all_child_chunks)
+      print("\n[3/3] Uploading chunks to Chroma (Strict Free-Tier Protocol)...")
+    
+      # Precision limits for your account
+      BATCH_SIZE = 1
+      DELAY_SECONDS = 13  # Keeps us under 5 RPM
+      DAILY_LIMIT = 20    # Keeps us under 20 RPD
+      
+      # We only take the first 20 chunks to prevent daily quota crashes
+      chunks_to_upload = all_child_chunks[:DAILY_LIMIT]
+      total_chunks = len(chunks_to_upload)
+      
+      print(f"⚠️ Strict daily limit active! Uploading only the first {total_chunks} chunks today.")
+
       for i in tqdm(range(0, total_chunks, BATCH_SIZE), desc="Uploading to Vector DB"):
-            batch = all_child_chunks[i : i + BATCH_SIZE]
+            batch = chunks_to_upload[i : i + BATCH_SIZE]
             vector_store.add_documents(documents=batch)
             
+            # Only sleep if there are more chunks remaining in our 20-chunk limit
             if i + BATCH_SIZE < total_chunks:
                   time.sleep(DELAY_SECONDS)
 
-      print("\n🎉 Structured ingestion complete!")
+      print(f"\n🎉 Successfully uploaded {total_chunks} chunks!")
+      if len(all_child_chunks) > DAILY_LIMIT:
+            print(f"💡 You have {len(all_child_chunks) - DAILY_LIMIT} chunks remaining. Run this again tomorrow to process the next batch.")
 
 if __name__ == "__main__":
       ingest_structured_pdf("data/dsa.pdf",18)
