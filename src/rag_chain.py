@@ -11,7 +11,6 @@ def get_rag_chain():
             search_type="similarity", 
             search_kwargs={"k": config.RETRIEVER_K}
       )
-
       # Initialize the LLM with the Google Generative AI model
 
       llm = ChatGoogleGenerativeAI(
