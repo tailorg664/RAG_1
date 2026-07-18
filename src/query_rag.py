@@ -11,55 +11,54 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from src.database import get_vector_store
 from src.document_utils import TOC_MAP  # Importing our structural map reference!
 
-def find_best_section_reference(query_text: str) -> str:
+def find_best_section_reference(query_text: str) -> str | None:
     """
-    A lightweight router that scans our Table of Contents map keys 
-    to find the most relevant structural reference.
+    A lightweight router that scans the table-of-contents titles to find a
+    strong section match for targeted queries. Broad queries that do not have a
+    clear structural match should return None so retrieval stays global.
     """
     query_lower = query_text.lower()
     best_section = None
     max_matches = 0
 
-    # Simple keyword routing against our TOC Reference map
     for section_id, (page, title) in TOC_MAP.items():
         title_words = title.lower().replace(",", "").replace("-", " ").split()
-        # Count how many words in the section title match the user query
         matches = sum(1 for word in title_words if word in query_lower and len(word) > 2)
-        
+
         if matches > max_matches:
             max_matches = matches
             best_section = section_id
-            
+
+    # Only use a section filter when the query clearly matches a specific topic.
+    # Avoid over-constraining broad questions like "What is java?".
+    if max_matches < 2:
+        return None
+
     return best_section
 
 def ask_dsa_system_guided(query_text: str):
       vector_store = get_vector_store()
 
-      # 1. Look up our "Reference Map" first
       target_section = find_best_section_reference(query_text)
 
-      # 2. Configure the retriever with a strict metadata filter if a section was found
       if target_section:
             print(f"🎯 Reference Router matched query to Section {target_section} ({TOC_MAP[target_section][1]})")
-            # This metadata filter forces Chroma to ignore the rest of the book completely!
             retriever = vector_store.as_retriever(
-            search_kwargs={
-                  "k": 3,
-                  "filter": {"parent_section": target_section} 
-            }
+                search_kwargs={
+                    "k": 3,
+                    "filter": {"parent_section": target_section}
+                }
             )
       else:
             print("🌐 No direct reference matched. Performing a global database search...")
             retriever = vector_store.as_retriever(search_kwargs={"k": 3})
-            
-      # 3. Rest of your LLM generation chain...
+
       llm = ChatGoogleGenerativeAI(
             model=config.LLM_MODEL,
             temperature=config.LLM_TEMPERATURE,
             max_output_tokens=config.LLM_MAX_TOKENS,
       )
 
-      # [Insert standard RAG chain logic here...]
       prompt_template = ChatPromptTemplate.from_messages(
             [
                   ("system", config.SYSTEM_PROMPT),
