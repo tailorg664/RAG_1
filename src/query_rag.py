@@ -14,8 +14,7 @@ from src.document_utils import TOC_MAP  # Importing our structural map reference
 def find_best_section_reference(query_text: str) -> str | None:
     """
     A lightweight router that scans the table-of-contents titles to find a
-    strong section match for targeted queries. Broad queries that do not have a
-    clear structural match should return None so retrieval stays global.
+    strong section match for targeted queries. There can be multiple matches, but we only return the best three.
     """
     query_lower = query_text.lower()
     best_section = None
