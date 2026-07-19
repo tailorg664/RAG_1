@@ -18,4 +18,5 @@ if __name__ == "__main__":
     # if len(sys.argv) > 1 and sys.argv[1] == "--ingest":
     #     ingest_document("data/dsa.pdf")
     # else:
-    run_query("What is java?")
+    user_query = input("Enter your query: ")
+    run_query(user_query)
